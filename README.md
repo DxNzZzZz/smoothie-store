@@ -27,18 +27,21 @@ A modern, full-stack smoothie store application built with **Rust (Rocket)** and
 ### Installation
 
 1. **Clone the repository**:
+
    ```bash
    git clone https://github.com/yourusername/smoothie-store.git
    cd smoothie-store
    ```
 
 2. **Setup environment variables**:
+
    ```bash
    cp .env.example .env
    ```
 
 3. **Initialize the database**:
    The application will automatically use `smoothies.db`. If you have the SQLx CLI installed, you can run:
+
    ```bash
    sqlx db create
    sqlx migrate run
@@ -56,7 +59,3 @@ A modern, full-stack smoothie store application built with **Rust (Rocket)** and
 - `/static`: Frontend assets (HTML, CSS, JS, Components).
 - `/migrations`: SQL database schema migrations.
 - `Rocket.toml`: Framework configuration.
-
-## 📄 License
-
-This project is open-source and available under the [MIT License](LICENSE).
