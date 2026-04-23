@@ -1,0 +1,7 @@
+[default]
+address = "127.0.0.1"
+port = 8000
+template_dir = "templates"
+secret_key = "hPRYyVRiMyxpw5rl+2x1OyL7/RRf63/D7URtHJE47is="
+
+[default.databases]

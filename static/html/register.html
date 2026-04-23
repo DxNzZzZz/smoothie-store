@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8">
+    <title>Регистрация — BlendBar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/global.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          document.getElementById('register-form')?.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const payload = {
+                  full_name: document.getElementById('full_name').value,
+                  email: document.getElementById('email').value,
+                  password: document.getElementById('password').value
+              };
+              
+              try {
+                  const res = await fetch('/api/register', {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify(payload)
+                  });
+                  const data = await res.json();
+                  if (data.success) {
+                      window.location.href = '/profile.html';
+                  } else {
+                      document.getElementById('error-msg').textContent = data.error || 'Грешка при регистрация';
+                      document.getElementById('error-msg').style.display = 'block';
+                  }
+              } catch(e) {
+                  document.getElementById('error-msg').textContent = 'Network Error';
+                  document.getElementById('error-msg').style.display = 'block';
+              }
+          });
+      });
+    </script>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <main class="container">
+      <section class="section" style="max-width:400px; margin:4rem auto;">
+        <h1 style="text-align:center; font-family:'Fraunces',serif; margin-bottom:2rem;">Създайте Акаунт</h1>
+        
+        <div id="error-msg" class="flash flash-error" style="display:none; margin-bottom:1.5rem;"></div>
+        
+        <form id="register-form">
+          <div class="form-group">
+            <label for="full_name">Пълно Име</label>
+            <input type="text" id="full_name" name="full_name" required>
+          </div>
+          <div class="form-group">
+            <label for="email">Имейл</label>
+            <input type="email" id="email" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Парола</label>
+            <input type="password" id="password" name="password" required minlength="6">
+          </div>
+          <button type="submit" class="btn-full" style="margin-top:1rem;">Регистрация</button>
+        </form>
+
+        <p style="text-align:center; margin-top:2rem; font-size:0.9rem;">
+          Вече имате акаунт? <a href="/user_login.html" style="color:var(--emerald);">Влезте тук</a>
+        </p>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+</body>
+</html>

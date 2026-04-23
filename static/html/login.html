@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8">
+    <title>Администраторски Вход — BlendBar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/global.js"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+          document.getElementById('login-form')?.addEventListener('submit', async (e) => {
+              e.preventDefault();
+              const payload = {
+                  username: document.getElementById('username').value,
+                  password: document.getElementById('password').value
+              };
+              
+              try {
+                  const res = await fetch('/api/admin/login', {
+                      method: 'POST',
+                      headers: {'Content-Type': 'application/json'},
+                      body: JSON.stringify(payload)
+                  });
+                  const data = await res.json();
+                  if (data.success) {
+                      window.location.href = '/admin.html';
+                  } else {
+                      document.getElementById('error-msg').textContent = data.error || 'Невалиден вход';
+                      document.getElementById('error-msg').style.display = 'block';
+                  }
+              } catch(e) {
+                  document.getElementById('error-msg').textContent = 'Network Error';
+                  document.getElementById('error-msg').style.display = 'block';
+              }
+          });
+      });
+    </script>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <main class="container">
+      <section class="section" style="max-width: 400px; margin: 4rem auto;">
+        <h1 style="text-align: center; font-family: 'Fraunces', serif; margin-bottom: 2rem;">Администратор</h1>
+        
+        <div id="error-msg" class="flash flash-error" style="display:none; margin-bottom:1.5rem;"></div>
+
+        <form id="login-form">
+          <div class="form-group">
+            <label for="username">Потребителско Име</label>
+            <input type="text" id="username" name="username" required>
+          </div>
+          <div class="form-group">
+            <label for="password">Парола</label>
+            <input type="password" id="password" name="password" required>
+          </div>
+          <button type="submit" class="btn-full" style="margin-top: 1rem;">Вход</button>
+        </form>
+      </section>
+    </main>
+
+    <div id="footer"></div>
+</body>
+</html>

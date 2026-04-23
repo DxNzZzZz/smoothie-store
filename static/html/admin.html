@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8">
+    <title>Администраторски Панел — BlendBar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+    <script src="/js/global.js"></script>
+    <script src="/js/admin.js"></script>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <main class="container">
+      <section class="section">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+          <h1 class="heading-main" style="margin:0;">Управление на Поръчки</h1>
+          <a href="/api/admin/logout" class="btn btn-outline">Изход</a>
+        </div>
+
+        <div class="row">
+          <div class="col" style="flex:2;">
+            <h2 class="heading-sub" style="margin-bottom: 1.5rem;">Чакащи Поръчки</h2>
+            <div id="orders-container">Зареждане...</div>
+          </div>
+
+          <div class="col" style="flex:1; display:none;" id="superadmin-panel">
+            <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
+              <h2 class="heading-sub" style="margin-bottom: 1rem; color: #d32f2f;">Управление на Администратори (Superadmin)</h2>
+              
+              <div id="flash-msg" class="flash" style="display:none; margin-bottom: 1rem;"></div>
+
+              <div style="margin-bottom: 20px;">
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Добавяне на нов</h3>
+                <form id="new-admin-form">
+                  <input type="text" id="new_admin_username" placeholder="Потребителско име" required style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                  <input type="password" id="new_admin_password" placeholder="Парола" required style="width: 100%; margin-bottom: 0.5rem; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;">
+                  <label style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.9rem; margin-bottom: 1rem;">
+                    <input type="checkbox" id="new_admin_super"> Супер админ
+                  </label>
+                  <button type="submit" class="btn-full" style="padding: 0.5rem;">Създай</button>
+                </form>
+              </div>
+
+              <div>
+                <h3 style="font-size: 1.1rem; margin-bottom: 0.5rem;">Съществуващи администратори</h3>
+                <ul id="admins-list" style="list-style: none; padding: 0; font-size: 0.9rem;">
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+</body>
+</html>

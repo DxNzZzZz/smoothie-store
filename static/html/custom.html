@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8">
+    <title>Персонализирано Смути — BlendBar</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+      .builder-container { display: flex; gap: 2rem; flex-wrap: wrap; margin-bottom: 4rem; }
+      .builder-main { flex: 2; min-width: 300px; }
+      .builder-sidebar { flex: 1; min-width: 280px; background: white; padding: 1.5rem; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); height: fit-content; position: sticky; top: 2rem; border: 1px solid var(--border); }
+
+      /* ── Fruit cards — 2-column grid ── */
+      #fruits-container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 0.6rem;
+      }
+      .fruit-option {
+        background: #fafafa;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 0.75rem 0.9rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+        transition: border-color .18s, box-shadow .18s;
+      }
+      .fruit-option:has(.fruit-slider:not([value="0"])),
+      .fruit-option.active { border-color: var(--emerald); box-shadow: 0 0 0 2px rgba(28,74,53,.1); }
+      .fruit-option-header { display: flex; align-items: center; gap: 0.5rem; }
+      .fruit-option-emoji { font-size: 1.6rem; line-height: 1; flex-shrink: 0; }
+      .fruit-option-info { min-width: 0; flex: 1; }
+      .fruit-option-name-row { display: flex; align-items: center; gap: 4px; }
+      .fruit-option-name { font-weight: 600; font-size: 0.88rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .fruit-option-meta { font-size: 0.72rem; color: #888; display: block; margin-top: 1px; }
+      .fruit-slider-row { display: flex; align-items: center; gap: 0.5rem; }
+      .fruit-slider { flex: 1; cursor: pointer; accent-color: var(--emerald); }
+      .qty-val { font-size: 0.82rem; font-weight: 700; color: var(--emerald); white-space: nowrap; min-width: 36px; text-align: right; }
+
+      /* ── Macro tooltip ── */
+      .macro-tooltip-wrapper { position: relative; display: inline-flex; flex-shrink: 0; }
+      .macro-info-btn {
+        background: none; border: 1.5px solid #ccc; border-radius: 50%;
+        width: 17px; height: 17px; cursor: pointer; font-size: 0.6rem;
+        display: inline-flex; align-items: center; justify-content: center;
+        color: #888; padding: 0; line-height: 1; transition: border-color .15s, color .15s;
+      }
+      .macro-info-btn:hover, .macro-info-btn:focus { border-color: var(--emerald); color: var(--emerald); outline: none; }
+      .macro-popup {
+        display: none; position: absolute; bottom: calc(100% + 7px); left: 50%;
+        transform: translateX(-50%); background: var(--emerald); color: #fff;
+        border-radius: 9px; padding: 0.55rem 0.8rem; font-size: 0.75rem;
+        white-space: nowrap; z-index: 100; pointer-events: none;
+        box-shadow: 0 6px 18px rgba(0,0,0,.22); line-height: 1.7;
+      }
+      .macro-popup::after {
+        content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+        border: 5px solid transparent; border-top-color: var(--emerald);
+      }
+      .macro-popup .mp-row { display: flex; justify-content: space-between; gap: 1.2rem; }
+      .macro-popup .mp-label { opacity: .75; }
+      .macro-popup .mp-val { font-weight: 700; }
+      .macro-tooltip-wrapper:hover .macro-popup,
+      .macro-info-btn:focus ~ .macro-popup { display: block; }
+
+      /* ── Limit warning box ── */
+      #fruit-limit-warning {
+        display: none;
+        background: #fde8e8;
+        color: #7a2020;
+        border: 1px solid #f5c6c6;
+        border-radius: 10px;
+        padding: 0.85rem 1.1rem;
+        margin-top: 0.6rem;
+        font-size: 0.9rem;
+        font-weight: 500;
+        display: none;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      #fruit-limit-warning.visible { display: flex; }
+
+      .qty-controls { display: flex; align-items: center; gap: 0.5rem; }
+      .liquid-option { display: inline-flex; align-items: center; gap: 0.5rem; background: #fafafa; border: 1px solid var(--border); padding: 0.8rem 1rem; border-radius: 8px; cursor: pointer; margin-right: 0.5rem; margin-bottom: 0.5rem; }
+      .liquid-option input { cursor: pointer; }
+      .summary-stat { text-align: center; background: #eee; padding: 1rem; border-radius: 8px; margin-top: 1rem; }
+
+      @media (max-width: 600px) {
+        #fruits-container { grid-template-columns: 1fr; }
+      }
+    </style>
+    <script src="/js/global.js"></script>
+    <script src="/js/custom.js"></script>
+</head>
+<body>
+    <div id="navbar"></div>
+
+    <main class="container">
+        <section class="hero" style="padding: 3rem 2rem 4rem;">
+          <span class="hero-eyebrow">🎨 Създайте Свое</span>
+          <h1 style="font-size: clamp(2rem,6vw,4rem); margin-bottom: 0.5rem;">Персонализирано <em>Смути</em></h1>
+          <p>Изберете размер, основна течност и добавете плодове на стъпки от 20g.</p>
+        </section>
+
+        <section class="section" style="max-width: 1000px; margin: 0 auto;">
+          <form id="custom-form">
+            <div class="builder-container">
+              
+              <div class="builder-main">
+                <h2 style="color: var(--emerald);">1. Основни настройки</h2>
+                <div style="margin-bottom: 1rem;" id="customer-name-group">
+                  <label>Вашето Име</label>
+                  <input type="text" id="customer_name" name="customer_name" required style="width: 100%; border: 1px solid #ccc; padding: 0.5rem; border-radius: 6px;">
+                </div>
+
+                <div style="margin-bottom: 2rem;">
+                  <label>Размер</label>
+                  <select id="size-select" name="size" style="width: 100%; border: 1px solid #ccc; padding: 0.5rem; border-radius: 6px;">
+                    <option value="small" data-total="400" data-fruit="300">Малка (400g общо - Макс 300g плодове)</option>
+                    <option value="medium" data-total="600" data-fruit="450" selected>Средна (600g общо - Макс 450g плодове)</option>
+                    <option value="large" data-total="800" data-fruit="600">Голяма (800g общо - Макс 600g плодове)</option>
+                  </select>
+                </div>
+
+                <h2 style="color: var(--emerald);">2. Изберете Основна Течност</h2>
+                <div id="liquids-container" style="margin-bottom: 2rem; display: flex; flex-wrap: wrap;">
+                  Зареждане...
+                </div>
+
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                  <h2 style="color: var(--emerald); margin: 0;">3. Добавете Плодове (Макс: <span id="fruit-max-display">450</span>g)</h2>
+                  <select id="sort-select" style="padding: 0.3rem; border-radius: 4px; border: 1px solid #ccc;">
+                    <option value="name">Сортирай: А-Я</option>
+                    <option value="cal">Сортирай: Калории ↓</option>
+                    <option value="p">Сортирай: Протеин ↓</option>
+                    <option value="c">Сортирай: Въглехидрати ↓</option>
+                    <option value="f">Сортирай: Мазнини ↓</option>
+                  </select>
+                </div>
+                <div style="margin-bottom: 2rem;">
+                  <p style="font-size: 0.9rem; color: #666; margin-top: -0.5rem;">Текущи плодове: <span id="fruit-current-display">0</span>g</p>
+                  <div id="fruits-container">
+                    Зареждане...
+                  </div>
+                  <div id="fruit-limit-warning" role="alert">
+                    <span style="font-size:1.2rem;">⚠️</span>
+                    <span id="fruit-limit-warning-text"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="builder-sidebar">
+                <h2 style="margin-bottom: 1.5rem; font-family: 'Fraunces', serif;">Резюме</h2>
+                
+                <ul id="summary-list" style="list-style: none; padding: 0; margin-bottom: 1.5rem; font-size: 0.95rem;">
+                </ul>
+                
+                <hr style="border: none; border-top: 1px solid var(--border-color); margin: 1.5rem 0;">
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                  <div style="text-align: center; padding: 1rem; background: #e8f5e9; border-radius: 8px;">
+                    <div style="font-size: 0.8rem; color: #666; text-transform: uppercase;">Общо Макроси</div>
+                    <strong style="font-size: 1.2rem; color: var(--emerald);" id="total-kcal">0 ккал</strong><br>
+                    <small style="color: #555;">
+                      <span id="total-pro">0</span>п • 
+                      <span id="total-car">0</span>в • 
+                      <span id="total-fat">0</span>м
+                    </small>
+                  </div>
+                  <div style="text-align: center; padding: 1rem; background: #e3f2fd; border-radius: 8px;">
+                    <div style="font-size: 0.8rem; color: #666; text-transform: uppercase;">Цена</div>
+                    <strong style="font-size: 1.5rem; color: #1976d2;" id="total-price">€0.00</strong><br>
+                    <small style="color: #555;">+10% такса за персонализиране</small>
+                  </div>
+                </div>
+                
+                <div id="flash-message" class="flash" style="display:none; margin-bottom: 1rem;"></div>
+
+                <input type="hidden" id="form-ingredients-json">
+                <button type="submit" class="btn-full" id="submit-btn" disabled>Поръчай ✓</button>
+              </div>
+
+            </div>
+          </form>
+        </section>
+    </main>
+
+    <div id="footer"></div>
+</body>
+</html>

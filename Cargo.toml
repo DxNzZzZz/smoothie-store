@@ -1,0 +1,12 @@
+[package]
+name = "smoothie-store"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rocket = { version = "0.5", features = ["json", "secrets"] }
+sqlx = { version = "0.7", features = ["runtime-tokio-native-tls", "sqlite", "macros"] }
+serde = { version = "1", features = ["derive"] }
+tokio = { version = "1", features = ["full"] }
+serde_json = "1"
+bcrypt = "0.15"
