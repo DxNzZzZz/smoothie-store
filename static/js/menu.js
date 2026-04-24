@@ -50,6 +50,25 @@ document.addEventListener('DOMContentLoaded', async () => {
             `;
             grid.appendChild(card);
         }
+        // "Build your own" CTA card — always last
+        const ctaCard = document.createElement('a');
+        ctaCard.href = '/custom';
+        ctaCard.className = 'smoothie-card custom-cta-card';
+        ctaCard.innerHTML = `
+          <div class="card-header custom-cta-header">
+            <span class="card-emoji">🎨</span>
+            <div>
+              <div class="card-name">Направи свое смути</div>
+              <div class="card-price">Ти избираш всичко</div>
+            </div>
+          </div>
+          <div class="card-body custom-cta-body">
+            <p class="card-desc">Избери плодове, течност и размер — ние го правим. Цената се изчислява автоматично.</p>
+            <div class="custom-cta-btn">Създай сега →</div>
+          </div>
+        `;
+        grid.appendChild(ctaCard);
+
     } catch(e) {
         console.error("Failed to fetch menu: ", e);
     }

@@ -23,10 +23,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             option.textContent = `${s.emoji || '🥤'} ${s.name} — €${s.price.toFixed(2)} (${s.total_calories || 0} ккал)`;
             select.appendChild(option);
         }
+
+        // Pre-select smoothie if ?id= is in the URL
+        const preId = new URLSearchParams(window.location.search).get('id');
+        if (preId) select.value = preId;
+
     } catch(e) {
         console.error("Failed to fetch menu: ", e);
     }
-    
+
     // Check URL parameters for pre-selected or messages
     const params = new URLSearchParams(window.location.search);
     if (params.get('success') === 'true') {

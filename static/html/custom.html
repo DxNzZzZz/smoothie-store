@@ -100,7 +100,7 @@
         <section class="hero" style="padding: 3rem 2rem 4rem;">
           <span class="hero-eyebrow">🎨 Създайте Свое</span>
           <h1 style="font-size: clamp(2rem,6vw,4rem); margin-bottom: 0.5rem;">Персонализирано <em>Смути</em></h1>
-          <p>Изберете размер, основна течност и добавете плодове на стъпки от 20g.</p>
+          <p>Изберете размер, основа и плодове по ваше желание.</p>
         </section>
 
         <section class="section" style="max-width: 1000px; margin: 0 auto;">
@@ -117,13 +117,13 @@
                 <div style="margin-bottom: 2rem;">
                   <label>Размер</label>
                   <select id="size-select" name="size" style="width: 100%; border: 1px solid #ccc; padding: 0.5rem; border-radius: 6px;">
-                    <option value="small" data-total="400" data-fruit="300">Малка (400g общо - Макс 300g плодове)</option>
-                    <option value="medium" data-total="600" data-fruit="450" selected>Средна (600g общо - Макс 450g плодове)</option>
-                    <option value="large" data-total="800" data-fruit="600">Голяма (800g общо - Макс 600g плодове)</option>
+                    <option value="small" data-total="400" data-fruit="300">Малка (400мл — макс 300g плодове)</option>
+                    <option value="medium" data-total="600" data-fruit="450" selected>Средна (600мл — макс 450g плодове)</option>
+                    <option value="large" data-total="800" data-fruit="600">Голяма (800мл — макс 600g плодове)</option>
                   </select>
                 </div>
 
-                <h2 style="color: var(--emerald);">2. Изберете Основна Течност</h2>
+                <h2 style="color: var(--emerald);">2. Изберете Основа</h2>
                 <div id="liquids-container" style="margin-bottom: 2rem; display: flex; flex-wrap: wrap;">
                   Зареждане...
                 </div>
@@ -151,7 +151,7 @@
               </div>
 
               <div class="builder-sidebar">
-                <h2 style="margin-bottom: 1.5rem; font-family: 'Fraunces', serif;">Резюме</h2>
+                <h2 style="margin-bottom: 1.5rem; font-family: 'Fraunces', serif;">Обобщение</h2>
                 
                 <ul id="summary-list" style="list-style: none; padding: 0; margin-bottom: 1.5rem; font-size: 0.95rem;">
                 </ul>
@@ -160,7 +160,7 @@
 
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
                   <div style="text-align: center; padding: 1rem; background: #e8f5e9; border-radius: 8px;">
-                    <div style="font-size: 0.8rem; color: #666; text-transform: uppercase;">Общо Макроси</div>
+                    <div style="font-size: 1.0rem; color: #666; text-transform: uppercase;">Общо Макроси</div>
                     <strong style="font-size: 1.2rem; color: var(--emerald);" id="total-kcal">0 ккал</strong><br>
                     <small style="color: #555;">
                       <span id="total-pro">0</span>п • 
@@ -169,7 +169,7 @@
                     </small>
                   </div>
                   <div style="text-align: center; padding: 1rem; background: #e3f2fd; border-radius: 8px;">
-                    <div style="font-size: 0.8rem; color: #666; text-transform: uppercase;">Цена</div>
+                    <div style="font-size: 1.0rem; color: #666; text-transform: uppercase;">Цена</div>
                     <strong style="font-size: 1.5rem; color: #1976d2;" id="total-price">€0.00</strong><br>
                     <small style="color: #555;">+10% такса за персонализиране</small>
                   </div>

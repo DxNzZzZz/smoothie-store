@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             const tagsHtml = tags.map(t => `<span class="tag">${t.trim()}</span>`).join('');
             
             const card = document.createElement('a');
-            card.href = '/menu/' + s.id;
+            card.href = '/detail?id=' + s.id;
             card.className = 'smoothie-card';
             card.innerHTML = `
               <div class="card-header">

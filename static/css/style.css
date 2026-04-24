@@ -315,6 +315,44 @@ a { color: inherit; text-decoration: none; }
   margin-top: .15rem;
 }
 
+/* ─── Custom CTA Card ───────────────────────────────────────────── */
+.custom-cta-card {
+  border: 2px dashed var(--tangerine);
+  background: linear-gradient(160deg, #fff9f5 0%, #fff 100%);
+}
+
+.custom-cta-card:hover {
+  border-color: var(--tangerine);
+  box-shadow: 0 12px 40px rgba(232,93,38,.18);
+}
+
+.custom-cta-header {
+  background: linear-gradient(135deg, var(--tangerine) 0%, #c94d1f 100%) !important;
+}
+
+.custom-cta-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.custom-cta-btn {
+  display: inline-block;
+  background: var(--tangerine);
+  color: white;
+  font-weight: 700;
+  font-size: .9rem;
+  padding: .6rem 1.4rem;
+  border-radius: 50px;
+  align-self: flex-start;
+  transition: transform .18s, box-shadow .18s;
+}
+
+.custom-cta-card:hover .custom-cta-btn {
+  transform: translateX(4px);
+  box-shadow: 0 4px 14px rgba(232,93,38,.4);
+}
+
 /* ─── Tags ──────────────────────────────────────────────────────── */
 .tags {
   display: flex;

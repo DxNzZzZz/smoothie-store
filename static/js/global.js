@@ -29,7 +29,6 @@ async function checkAuth() {
             `;
         } else {
             navRight.innerHTML = `
-                <a href="/login" class="nav-link">Администратор</a>
                 <a href="/user_login" class="nav-link">Вход</a>
                 <a href="/register" class="nav-link">Регистрация</a>
             `;

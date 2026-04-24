@@ -23,6 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
           <h1>${smoothie.name}</h1>
           <p>${smoothie.description || ''}</p>
           <div class="detail-price">€${smoothie.price.toFixed(2)}</div>
+          <a href="/order?id=${smoothie.id}" class="btn" style="margin-top:1.8rem; display:inline-block;">
+            Поръчай сега 🥤
+          </a>
         `;
         
         // Tags
