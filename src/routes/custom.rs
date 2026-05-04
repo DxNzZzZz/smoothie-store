@@ -1,9 +1,9 @@
 use rocket::serde::json::Json;
 use rocket::State;
 use rocket::{get, post};
+use serde::Serialize;
 use sqlx::SqlitePool;
 use std::collections::HashMap;
-use serde::Serialize;
 
 use crate::models::smoothie::{get_all_ingredients, Ingredient};
 
@@ -30,8 +30,16 @@ pub struct BuilderData {
 #[get("/api/custom")]
 pub async fn builder_api(pool: &State<SqlitePool>) -> Json<BuilderData> {
     let all_ingredients = get_all_ingredients(pool).await;
-    let fruits: Vec<Ingredient> = all_ingredients.iter().filter(|i| !i.is_liquid).cloned().collect();
-    let liquids: Vec<Ingredient> = all_ingredients.iter().filter(|i| i.is_liquid).cloned().collect();
+    let fruits: Vec<Ingredient> = all_ingredients
+        .iter()
+        .filter(|i| !i.is_liquid)
+        .cloned()
+        .collect();
+    let liquids: Vec<Ingredient> = all_ingredients
+        .iter()
+        .filter(|i| i.is_liquid)
+        .cloned()
+        .collect();
     Json(BuilderData { fruits, liquids })
 }
 
@@ -48,16 +56,15 @@ pub async fn submit_custom_api(
     request_user: crate::routes::user::OptionalRegularUser,
 ) -> Json<CustomOrderResponse> {
     // Reject malformed ingredient JSON immediately
-    let raw_ingredients: Vec<CustomIngredient> =
-        match serde_json::from_str(&form.ingredients) {
-            Ok(v) => v,
-            Err(_) => {
-                return Json(CustomOrderResponse {
-                    success: false,
-                    message: "Невалидни съставки.".to_string(),
-                })
-            }
-        };
+    let raw_ingredients: Vec<CustomIngredient> = match serde_json::from_str(&form.ingredients) {
+        Ok(v) => v,
+        Err(_) => {
+            return Json(CustomOrderResponse {
+                success: false,
+                message: "Невалидни съставки.".to_string(),
+            })
+        }
+    };
 
     if raw_ingredients.is_empty() {
         return Json(CustomOrderResponse {
@@ -137,13 +144,12 @@ pub async fn submit_custom_api(
     };
 
     let smoothie_id = match sqlx::query(
-        "INSERT INTO smoothies (name, description, price, tags, emoji, is_custom) VALUES (?, ?, ?, ?, ?, ?)",
+        "INSERT INTO smoothies (name, description, price, tags, is_custom) VALUES (?, ?, ?, ?, ?)",
     )
     .bind(&smoothie_name)
     .bind("Персонализирана смес, приготвена от клиент.")
     .bind(rounded_price)
     .bind("custom")
-    .bind("🎨")
     .bind(true)
     .execute(&mut *tx)
     .await

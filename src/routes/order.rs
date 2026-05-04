@@ -27,7 +27,7 @@ pub async fn order_post_api(
     match create_order(pool.inner(), &form.into_inner(), user_id, fallback_name).await {
         Ok(_) => Json(OrderResponse {
             success: true,
-            message: format!("Поръчката е приета за {}! Готова след ~5 минути 🥤", final_name),
+            message: format!("Поръчката е приета за {}! Готова след ~5 минути", final_name),
         }),
         Err(_) => Json(OrderResponse {
             success: false,

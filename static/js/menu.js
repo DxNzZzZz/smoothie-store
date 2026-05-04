@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.className = 'smoothie-card';
             card.innerHTML = `
               <div class="card-header">
-                <span class="card-emoji">${s.emoji}</span>
                 <div>
                   <div class="card-name">${s.name}</div>
                   <div class="card-price">€${s.price.toFixed(2)}</div>
@@ -56,7 +55,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         ctaCard.className = 'smoothie-card custom-cta-card';
         ctaCard.innerHTML = `
           <div class="card-header custom-cta-header">
-            <span class="card-emoji">🎨</span>
             <div>
               <div class="card-name">Направи свое смути</div>
               <div class="card-price">Ти избираш всичко</div>

@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 function renderOrders(orders) {
     const container = document.getElementById('orders-container');
     if (orders.length === 0) {
-        container.innerHTML = '<div style="background: white; padding: 2rem; border-radius: 12px; text-align: center; color: var(--text-muted);">В момента няма чакащи поръчки. Отпуснете се! ☕</div>';
+        container.innerHTML = '<div style="background: white; padding: 2rem; border-radius: 12px; text-align: center; color: var(--text-muted);">В момента няма чакащи поръчки. Отпуснете се!</div>';
         return;
     }
     
@@ -34,11 +34,25 @@ function renderOrders(orders) {
         
         const isCustom = o.is_custom ? '<span style="font-size: 0.8rem; background: var(--secondary); color:#fff; padding: 2px 6px; border-radius:12px; margin-left: 5px;">Персонализирано</span>' : '';
         const userMark = o.user_id ? '<span style="font-size: 0.8rem; background: #e0e0e0; color:#333; padding: 2px 6px; border-radius:12px;">Регистриран</span>' : '<span style="font-size: 0.8rem; background: #ffecb3; color:#795548; padding: 2px 6px; border-radius:12px;">Гост</span>';
-        
+
+        const ingredientRows = (o.ingredients || []).map(i =>
+            `<div style="display:flex; align-items:center; gap:0.5rem; padding:0.3rem 0; border-bottom:1px solid #f0f0f0;">
+                <span>${i.emoji}</span>
+                <span style="flex:1;">${i.name}</span>
+                <strong>${i.grams}g</strong>
+            </div>`
+        ).join('');
+        const ingredientsBlock = ingredientRows
+            ? `<div style="margin-top:0.8rem; background:#f9fafb; border-radius:8px; padding:0.6rem 0.8rem;">
+                <div style="font-size:0.75rem; font-weight:600; color:#555; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.4rem;">Съставки</div>
+                ${ingredientRows}
+               </div>`
+            : '';
+
         return `
         <div style="background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 1rem; border-left: 5px solid #d97706;">
             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-                <div>
+                <div style="flex:1;">
                     <h3 style="margin: 0 0 5px 0;">Поръчка #${o.id}</h3>
                     <p style="margin: 0 0 10px 0; color: #666; font-size: 0.9rem;">От: <strong>${o.customer_name || 'Неизвестен'}</strong> ${userMark}</p>
                     <div style="font-size: 1.1rem; margin-bottom: 5px;">
@@ -46,8 +60,9 @@ function renderOrders(orders) {
                     </div>
                     <div style="color: #666; text-transform: capitalize;">Размер: ${sizeText}</div>
                     <div style="color: #888; font-size: 0.85rem; margin-top: 5px;">${o.created_at}</div>
+                    ${ingredientsBlock}
                 </div>
-                <div>
+                <div style="margin-left:1rem;">
                     <form onsubmit="completeOrder(event, ${o.id})">
                         <button type="submit" class="btn" style="padding: 0.5rem 1rem; background: #059669;">Маркирай като Готова ✓</button>
                     </form>

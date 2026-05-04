@@ -253,7 +253,6 @@ a { color: inherit; text-decoration: none; }
   gap: 1rem;
 }
 
-.card-emoji { font-size: 3rem; line-height: 1; flex-shrink: 0; }
 
 .card-name {
   font-family: 'Fraunces', serif;
@@ -389,8 +388,6 @@ a { color: inherit; text-decoration: none; }
   background: var(--ivory);
   clip-path: ellipse(55% 100% at 50% 100%);
 }
-
-.detail-emoji { font-size: 5rem; margin-bottom: .5rem; }
 
 .detail-hero h1 {
   font-family: 'Fraunces', serif;

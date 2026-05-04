@@ -15,7 +15,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.className = 'smoothie-card';
             card.innerHTML = `
               <div class="card-header">
-                <span class="card-emoji">${s.emoji}</span>
                 <div>
                   <div class="card-name">${s.name}</div>
                   <div class="card-price">€${s.price.toFixed(2)}</div>

@@ -10,7 +10,7 @@ use serde::{Deserialize, Serialize};
 use crate::models::admin::{
     create_admin, delete_admin, get_admin_by_username, get_all_admins, update_admin_password, Admin,
 };
-use crate::models::order::{complete_order, get_pending_orders, OrderWithSmoothie};
+use crate::models::order::{complete_order, get_pending_orders, PendingOrder};
 
 #[derive(Serialize)]
 pub struct AdminUser {
@@ -109,7 +109,7 @@ pub fn logout_api(cookies: &CookieJar<'_>) -> Redirect {
 
 #[derive(Serialize)]
 pub struct DashboardData {
-    orders: Vec<OrderWithSmoothie>,
+    orders: Vec<PendingOrder>,
     admins: Vec<Admin>,
     is_superadmin: bool,
 }

@@ -19,12 +19,11 @@ document.addEventListener('DOMContentLoaded', async () => {
         
         // Hero
         document.getElementById('detail-hero').innerHTML = `
-          <div class="detail-emoji">${smoothie.emoji || '🥤'}</div>
           <h1>${smoothie.name}</h1>
           <p>${smoothie.description || ''}</p>
           <div class="detail-price">€${smoothie.price.toFixed(2)}</div>
           <a href="/order?id=${smoothie.id}" class="btn" style="margin-top:1.8rem; display:inline-block;">
-            Поръчай сега 🥤
+            Поръчай сега
           </a>
         `;
         
@@ -61,7 +60,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         // Ingredients
         document.getElementById('detail-ingredients').innerHTML = fruits.map(f => `
             <div class="ingredient-card">
-              <div class="ing-emoji">${f.emoji || '🌱'}</div>
+              <div class="ing-emoji">${f.emoji || ''}</div>
               <div class="ing-name">${f.name}</div>
               <div class="ing-grams">${f.grams}g</div>
               <div style="margin-top:.7rem; display:grid; grid-template-columns:1fr 1fr; gap:.3rem;">

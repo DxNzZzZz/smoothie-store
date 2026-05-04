@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         for (const s of smoothies) {
             const option = document.createElement('option');
             option.value = s.id;
-            option.textContent = `${s.emoji || '🥤'} ${s.name} — €${s.price.toFixed(2)} (${s.total_calories || 0} ккал)`;
+            option.textContent = `${s.name} — €${s.price.toFixed(2)} (${s.total_calories || 0} ккал)`;
             select.appendChild(option);
         }
 

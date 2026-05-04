@@ -9,7 +9,6 @@ pub struct SmoothieMacroRow {
     pub description: String,
     pub price: f64,
     pub tags: String,
-    pub emoji: String,
     pub is_custom: bool,
     pub total_calories: Option<f64>,
     pub total_protein: Option<f64>,
@@ -26,7 +25,6 @@ pub struct SmoothieWithMacros {
     pub description: String,
     pub price: f64,
     pub tags: Vec<String>,
-    pub emoji: String,
     pub is_custom: bool,
     pub total_calories: f64,
     pub total_protein: f64,
@@ -72,7 +70,6 @@ const MACRO_QUERY: &str = r#"
         s.description,
         s.price,
         s.tags,
-        s.emoji,
         s.is_custom,
         ROUND(SUM(f.calories  * sf.grams / 100.0), 1) AS total_calories,
         ROUND(SUM(f.protein_g * sf.grams / 100.0), 1) AS total_protein,
@@ -89,7 +86,10 @@ pub async fn get_all_with_macros(pool: &SqlitePool) -> Vec<SmoothieWithMacros> {
     sqlx::query_as::<_, SmoothieMacroRow>(&query)
         .fetch_all(pool)
         .await
-        .unwrap_or_else(|e| { eprintln!("DB error fetching menu: {e}"); vec![] })
+        .unwrap_or_else(|e| {
+            eprintln!("DB error fetching menu: {e}");
+            vec![]
+        })
         .into_iter()
         .map(row_to_macros)
         .collect()
@@ -123,16 +123,21 @@ pub async fn get_fruits_for_smoothie(pool: &SqlitePool, smoothie_id: i64) -> Vec
     .bind(smoothie_id)
     .fetch_all(pool)
     .await
-    .unwrap_or_else(|e| { eprintln!("DB error fetching smoothie fruits: {e}"); vec![] })
+    .unwrap_or_else(|e| {
+        eprintln!("DB error fetching smoothie fruits: {e}");
+        vec![]
+    })
 }
 
 pub async fn get_all_ingredients(pool: &SqlitePool) -> Vec<Ingredient> {
     sqlx::query_as::<_, Ingredient>("SELECT * FROM fruits ORDER BY is_liquid ASC, name ASC")
         .fetch_all(pool)
         .await
-        .unwrap_or_else(|e| { eprintln!("DB error fetching ingredients: {e}"); vec![] })
+        .unwrap_or_else(|e| {
+            eprintln!("DB error fetching ingredients: {e}");
+            vec![]
+        })
 }
-
 
 fn row_to_macros(row: SmoothieMacroRow) -> SmoothieWithMacros {
     SmoothieWithMacros {
@@ -140,12 +145,7 @@ fn row_to_macros(row: SmoothieMacroRow) -> SmoothieWithMacros {
         name: row.name,
         description: row.description,
         price: row.price,
-        tags: row
-            .tags
-            .split(',')
-            .map(|s| s.trim().to_string())
-            .collect(),
-        emoji: row.emoji,
+        tags: row.tags.split(',').map(|s| s.trim().to_string()).collect(),
         is_custom: row.is_custom,
         total_calories: row.total_calories.unwrap_or(0.0),
         total_protein: row.total_protein.unwrap_or(0.0),

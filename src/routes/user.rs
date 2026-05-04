@@ -7,9 +7,8 @@ use rocket::{get, post};
 use sqlx::SqlitePool;
 use serde::{Deserialize, Serialize};
 
-use crate::models::order::get_user_orders;
+use crate::models::order::{get_user_orders, UserOrderDetail};
 use crate::models::user::{create_user, get_user_by_email, get_user_by_id, update_user_password};
-use crate::models::order::OrderWithSmoothie;
 
 #[derive(Serialize)]
 pub struct RegularUser {
@@ -165,7 +164,7 @@ pub fn user_logout_api(cookies: &CookieJar<'_>) -> Redirect {
 #[derive(Serialize)]
 pub struct ProfileData {
     user: RegularUser,
-    orders: Vec<OrderWithSmoothie>,
+    orders: Vec<UserOrderDetail>,
 }
 
 #[get("/api/profile")]
