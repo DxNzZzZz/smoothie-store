@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 `<div style="display:flex; align-items:center; gap:0.5rem; padding:0.25rem 0; border-bottom:1px solid #f0f0f0; font-size:0.875rem;">
                     <span>${emojiImg(i.emoji, i.name)}</span>
                     <span style="flex:1;">${i.name}</span>
-                    <span style="color:#888;">${i.grams}g</span>
+                    <span style="color:#888;">${i.grams}г</span>
                 </div>`
             ).join('');
 
@@ -42,15 +42,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <div style="font-size:0.7rem; color:#888; text-transform:uppercase;">ккал</div>
                     </div>
                     <div style="text-align:center; background:#f9fafb; border-radius:8px; padding:0.5rem;">
-                        <div style="font-weight:700; font-size:1rem;">${o.total_protein.toFixed(1)}g</div>
+                        <div style="font-weight:700; font-size:1rem;">${o.total_protein.toFixed(1)}г</div>
                         <div style="font-size:0.7rem; color:#888; text-transform:uppercase;">Протеин</div>
                     </div>
                     <div style="text-align:center; background:#f9fafb; border-radius:8px; padding:0.5rem;">
-                        <div style="font-weight:700; font-size:1rem;">${o.total_carbs.toFixed(1)}g</div>
+                        <div style="font-weight:700; font-size:1rem;">${o.total_carbs.toFixed(1)}г</div>
                         <div style="font-size:0.7rem; color:#888; text-transform:uppercase;">Въглехидрати</div>
                     </div>
                     <div style="text-align:center; background:#f9fafb; border-radius:8px; padding:0.5rem;">
-                        <div style="font-weight:700; font-size:1rem;">${o.total_fat.toFixed(1)}g</div>
+                        <div style="font-weight:700; font-size:1rem;">${o.total_fat.toFixed(1)}г</div>
                         <div style="font-size:0.7rem; color:#888; text-transform:uppercase;">Мазнини</div>
                     </div>
                 </div>`;

@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
               <input type="radio" name="liquid_id" value="${l.id}" required ${idx === 0 ? 'checked' : ''}>
               <div style="display: flex; flex-direction: column;">
                 <span>${emojiImg(l.emoji, l.name)} ${l.name}</span>
-                <small style="color: #888; font-size: 0.75rem;">${l.calories || 0} ккал | ${l.protein_g || 0}п | ${l.carbs_g || 0}в | ${l.fat_g || 0}м (на 100g)</small>
+                <small style="color: #888; font-size: 0.75rem;">${l.calories || 0} ккал | ${l.protein_g || 0}п | ${l.carbs_g || 0}в | ${l.fat_g || 0}м (на 100г)</small>
               </div>
             </label>
         `).join('');
@@ -52,20 +52,20 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="macro-tooltip-wrapper">
                       <button class="macro-info-btn" type="button" tabindex="-1" aria-label="Макро информация">ℹ</button>
                       <div class="macro-popup">
-                        <div class="mp-row"><span class="mp-label">Протеин</span><span class="mp-val">${(f.protein_g||0).toFixed(1)}g</span></div>
-                        <div class="mp-row"><span class="mp-label">Въглехидрати</span><span class="mp-val">${(f.carbs_g||0).toFixed(1)}g</span></div>
-                        <div class="mp-row"><span class="mp-label">Мазнини</span><span class="mp-val">${(f.fat_g||0).toFixed(1)}g</span></div>
-                        <div class="mp-row"><span class="mp-label">Фибри</span><span class="mp-val">${(f.fiber_g||0).toFixed(1)}g</span></div>
-                        <div style="opacity:.55; font-size:0.68rem; margin-top:3px; text-align:center;">на 100g</div>
+                        <div class="mp-row"><span class="mp-label">Протеин</span><span class="mp-val">${(f.protein_g||0).toFixed(1)}г</span></div>
+                        <div class="mp-row"><span class="mp-label">Въглехидрати</span><span class="mp-val">${(f.carbs_g||0).toFixed(1)}г</span></div>
+                        <div class="mp-row"><span class="mp-label">Мазнини</span><span class="mp-val">${(f.fat_g||0).toFixed(1)}г</span></div>
+                        <div class="mp-row"><span class="mp-label">Фибри</span><span class="mp-val">${(f.fiber_g||0).toFixed(1)}г</span></div>
+                        <div style="opacity:.55; font-size:0.68rem; margin-top:3px; text-align:center;">на 100г</div>
                       </div>
                     </div>
                   </div>
-                  <span class="fruit-option-meta">€${f.price_per_100g.toFixed(2)}/100g · ${f.calories || 0} ккал</span>
+                  <span class="fruit-option-meta">€${f.price_per_100g.toFixed(2)}/100г · ${f.calories || 0} ккал</span>
                 </div>
               </div>
               <div class="fruit-slider-row">
                 <input type="range" class="fruit-slider" id="slider-${f.id}" min="0" max="600" step="10" value="0" oninput="updateFruitFromSlider(${f.id})">
-                <span class="qty-val" id="qty-val-${f.id}">0g</span>
+                <span class="qty-val" id="qty-val-${f.id}">0г</span>
               </div>
             </div>
         `).join('');
@@ -153,7 +153,7 @@ function recalc() {
       currDisplay().style.color = '#c0392b';
       currDisplay().style.fontWeight = 'bold';
       warningText.textContent =
-        `Достигнахте максималния лимит от ${maxFruitGrams}g плодове за този размер. ` +
+        `Достигнахте максималния лимит от ${maxFruitGrams}г плодове за този размер. ` +
         `За да добавите повече, изберете по-голям размер.`;
       warning.classList.add('visible');
     } else {
@@ -190,16 +190,16 @@ function recalc() {
 
       const li = document.createElement('li');
       li.style.marginBottom = '0.5rem';
-      li.innerHTML = `<span>${emojiImg(item.emoji, item.name)} ${item.name}</span> <span style="float:right; font-weight:bold;">${gFloat}g</span>`;
+      li.innerHTML = `<span>${emojiImg(item.emoji, item.name)} ${item.name}</span> <span style="float:right; font-weight:bold;">${gFloat}г</span>`;
       summaryList.appendChild(li);
     }
     
     tPrice = tPrice * 1.1;
 
     document.getElementById('total-kcal').textContent = Math.round(tCal) + ' ккал';
-    document.getElementById('total-pro').textContent = tP.toFixed(1) + 'g';
-    document.getElementById('total-car').textContent = tC.toFixed(1) + 'g';
-    document.getElementById('total-fat').textContent = tF.toFixed(1) + 'g';
+    document.getElementById('total-pro').textContent = tP.toFixed(1) + 'г';
+    document.getElementById('total-car').textContent = tC.toFixed(1) + 'г';
+    document.getElementById('total-fat').textContent = tF.toFixed(1) + 'г';
     document.getElementById('total-price').textContent = '€' + tPrice.toFixed(2);
 
     document.getElementById('form-ingredients-json').value = JSON.stringify(payload);
@@ -223,7 +223,7 @@ function onSizeChange() {
         const slider = document.getElementById('slider-' + key);
         if(slider) slider.value = 0;
         const valDisp = document.getElementById('qty-val-' + key);
-        if(valDisp) valDisp.textContent = '0g';
+        if(valDisp) valDisp.textContent = '0г';
       }
     }
     recalc();
@@ -251,7 +251,7 @@ window.updateFruitFromSlider = function(id) {
       fruitSelection[id] = newValue;
     }
     
-    document.getElementById('qty-val-' + id).textContent = fruitSelection[id] + 'g';
+    document.getElementById('qty-val-' + id).textContent = fruitSelection[id] + 'г';
     // highlight card when it has a non-zero value
     const card = document.querySelector(`.fruit-option[data-id="${id}"]`);
     if (card) card.classList.toggle('active', fruitSelection[id] > 0);

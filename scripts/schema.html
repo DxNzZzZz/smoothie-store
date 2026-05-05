@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+    <meta charset="utf-8">
+    <title>BlendBar — Database Schema</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fraunces:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --ivory:      #F7F3E9;
+            --emerald:    #1C4A35;
+            --emerald-lt: #2d6a4f;
+            --tangerine:  #E85D26;
+            --sage:       #B7D4BF;
+            --sage-dark:  #5a8a68;
+            --purple:     #6d3fa0;
+            --text:       #1A1A1A;
+            --text-muted: #6b7068;
+            --border:     #ddd6c8;
+            --pk-bg:      #fff3e0;
+            --fk-bg:      #e8f4ec;
+        }
+
+        body {
+            background: var(--ivory);
+            font-family: 'DM Sans', sans-serif;
+            min-height: 100vh;
+            padding: 2.5rem 2rem 4rem;
+            color: var(--text);
+        }
+
+        /* ── Header ─────────────────────────────────────── */
+        .page-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Fraunces', serif;
+            font-size: 2rem;
+            color: var(--emerald);
+            margin-bottom: 0.3rem;
+        }
+
+        .page-header p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ── Legend ──────────────────────────────────────── */
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem 2rem;
+            justify-content: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.45rem;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .legend-swatch {
+            width: 26px;
+            height: 14px;
+            border-radius: 3px;
+            border: 1px solid var(--border);
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        /* ── Diagram wrapper ─────────────────────────────── */
+        .diagram-wrapper {
+            position: relative;
+            overflow-x: auto;
+            padding-bottom: 1rem;
+        }
+
+        .diagram {
+            display: grid;
+            grid-template-columns: repeat(5, 210px);
+            grid-template-rows: auto auto;
+            column-gap: 3.5rem;
+            row-gap: 3rem;
+            min-width: 1240px;
+            padding: 1.5rem 1rem;
+            position: relative;
+        }
+
+        .t-fruits          { grid-column: 1; grid-row: 1; }
+        .t-smoothie-fruits { grid-column: 2; grid-row: 1; }
+        .t-smoothies       { grid-column: 3; grid-row: 1; }
+        .t-orders          { grid-column: 4; grid-row: 1; }
+        .t-users           { grid-column: 5; grid-row: 1; }
+        .t-admins          { grid-column: 3; grid-row: 2; }
+
+        /* ── Table cards ──────────────────────────────────── */
+        .table-card {
+            background: #fff;
+            border-radius: 10px;
+            border: 2px solid var(--emerald);
+            box-shadow: 0 4px 20px rgba(28,74,53,.10);
+            overflow: hidden;
+        }
+
+        .table-card.junction {
+            border-color: var(--tangerine);
+        }
+
+        .table-card.standalone {
+            border-color: var(--purple);
+        }
+
+        .table-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.55rem 0.85rem;
+            font-weight: 700;
+            font-size: 0.88rem;
+            letter-spacing: 0.02em;
+            color: #fff;
+        }
+
+        .table-card:not(.junction):not(.standalone) .table-header { background: var(--emerald); }
+        .table-card.junction   .table-header { background: var(--tangerine); }
+        .table-card.standalone .table-header { background: var(--purple); }
+
+        .field {
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.3rem 0.85rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.78rem;
+        }
+
+        .field:last-child { border-bottom: none; }
+        .field.pk { background: var(--pk-bg); }
+        .field.fk { background: var(--fk-bg); }
+        .field.pk.fk { background: linear-gradient(90deg, var(--pk-bg) 50%, var(--fk-bg) 50%); }
+
+        .field-name {
+            font-weight: 500;
+            flex: 1;
+        }
+
+        .field-type {
+            color: var(--text-muted);
+            font-size: 0.7rem;
+            white-space: nowrap;
+        }
+
+        .badge {
+            font-size: 0.58rem;
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            flex-shrink: 0;
+        }
+
+        .badge-pk  { background: var(--tangerine); color: #fff; }
+        .badge-fk  { background: var(--emerald-lt); color: #fff; }
+        .badge-cpk { background: var(--purple); color: #fff; }
+
+        /* ── SVG relationship lines ───────────────────────── */
+        svg.lines {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            overflow: visible;
+            z-index: 0;
+        }
+
+        .table-card { position: relative; z-index: 1; }
+
+        .rel-line {
+            fill: none;
+            stroke: var(--sage-dark);
+            stroke-width: 2;
+        }
+
+        .rel-line.optional {
+            stroke-dasharray: 6 3;
+            opacity: 0.65;
+        }
+
+        /* ── FK note ─────────────────────────────────────── */
+        .fk-note {
+            font-size: 0.68rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+            text-align: center;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="page-header">
+        <h1>BlendBar — Database Schema</h1>
+        <p>Таблици, полета и връзки между тях</p>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <span class="legend-swatch" style="background:var(--pk-bg);"></span>
+            Първичен ключ (PK)
+        </div>
+        <div class="legend-item">
+            <span class="legend-swatch" style="background:var(--fk-bg);"></span>
+            Външен ключ (FK)
+        </div>
+        <div class="legend-item">
+            <svg width="34" height="14" style="flex-shrink:0;">
+                <line x1="2" y1="7" x2="26" y2="7" stroke="var(--sage-dark)" stroke-width="2"/>
+                <circle cx="28" cy="7" r="4" fill="var(--tangerine)"/>
+            </svg>
+            Задължителна връзка
+        </div>
+        <div class="legend-item">
+            <svg width="34" height="14" style="flex-shrink:0;">
+                <line x1="2" y1="7" x2="26" y2="7" stroke="var(--sage-dark)" stroke-width="2" stroke-dasharray="5 3" opacity="0.65"/>
+                <circle cx="28" cy="7" r="4" fill="var(--tangerine)" opacity="0.65"/>
+            </svg>
+            Незадължителна връзка (NULL)
+        </div>
+        <div class="legend-item">
+            <span class="legend-swatch" style="background:var(--tangerine); border-color:var(--tangerine);"></span>
+            Свързваща таблица (junction)
+        </div>
+        <div class="legend-item">
+            <span class="legend-swatch" style="background:var(--purple); border-color:var(--purple);"></span>
+            Независима таблица
+        </div>
+    </div>
+
+    <div class="diagram-wrapper" id="wrapper">
+        <div class="diagram" id="diagram">
+
+            <svg class="lines" id="lines"></svg>
+
+            <!-- ── fruits ──────────────────────────────────── -->
+            <div class="table-card t-fruits" id="t-fruits">
+                <div class="table-header">🍓 fruits</div>
+                <div class="field pk">
+                    <span class="badge badge-pk">PK</span>
+                    <span class="field-name" id="fruits-id">id</span>
+                    <span class="field-type">INTEGER</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">name</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">emoji</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">calories</span>
+                    <span class="field-type">REAL</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">protein_g</span>
+                    <span class="field-type">REAL</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">carbs_g</span>
+                    <span class="field-type">REAL</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">fat_g</span>
+                    <span class="field-type">REAL</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">fiber_g</span>
+                    <span class="field-type">REAL</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">price_per_100g</span>
+                    <span class="field-type">REAL</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">is_liquid</span>
+                    <span class="field-type">BOOLEAN</span>
+                </div>
+            </div>
+
+            <!-- ── smoothie_fruits ─────────────────────────── -->
+            <div class="table-card junction t-smoothie-fruits" id="t-smoothie-fruits">
+                <div class="table-header">🔗 smoothie_fruits</div>
+                <div class="field pk fk" id="sf-smoothie-id">
+                    <span class="badge badge-fk">FK</span>
+                    <span class="badge badge-cpk">PK</span>
+                    <span class="field-name">smoothie_id</span>
+                    <span class="field-type">INTEGER</span>
+                </div>
+                <div class="field pk fk" id="sf-fruit-id">
+                    <span class="badge badge-fk">FK</span>
+                    <span class="badge badge-cpk">PK</span>
+                    <span class="field-name">fruit_id</span>
+                    <span class="field-type">INTEGER</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">grams</span>
+                    <span class="field-type">REAL</span>
+                </div>
+                <div class="fk-note">PK = (smoothie_id, fruit_id)</div>
+            </div>
+
+            <!-- ── smoothies ───────────────────────────────── -->
+            <div class="table-card t-smoothies" id="t-smoothies">
+                <div class="table-header">🥤 smoothies</div>
+                <div class="field pk">
+                    <span class="badge badge-pk">PK</span>
+                    <span class="field-name" id="smoothies-id">id</span>
+                    <span class="field-type">INTEGER</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">name</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">description</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">price</span>
+                    <span class="field-type">REAL</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">tags</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">emoji</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">is_custom</span>
+                    <span class="field-type">BOOLEAN</span>
+                </div>
+            </div>
+
+            <!-- ── orders ──────────────────────────────────── -->
+            <div class="table-card t-orders" id="t-orders">
+                <div class="table-header">📋 orders</div>
+                <div class="field pk">
+                    <span class="badge badge-pk">PK</span>
+                    <span class="field-name">id</span>
+                    <span class="field-type">INTEGER</span>
+                </div>
+                <div class="field fk" id="orders-smoothie-id">
+                    <span class="badge badge-fk">FK</span>
+                    <span class="field-name">smoothie_id</span>
+                    <span class="field-type">INTEGER</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">size</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">customer_name</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">created_at</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">status</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field fk" id="orders-user-id">
+                    <span class="badge badge-fk">FK</span>
+                    <span class="field-name">user_id</span>
+                    <span class="field-type">INTEGER?</span>
+                </div>
+            </div>
+
+            <!-- ── users ───────────────────────────────────── -->
+            <div class="table-card t-users" id="t-users">
+                <div class="table-header">👤 users</div>
+                <div class="field pk">
+                    <span class="badge badge-pk">PK</span>
+                    <span class="field-name" id="users-id">id</span>
+                    <span class="field-type">INTEGER</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">email</span>
+                    <span class="field-type">TEXT UNIQUE</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">password</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">full_name</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+            </div>
+
+            <!-- ── admins ──────────────────────────────────── -->
+            <div class="table-card standalone t-admins" id="t-admins">
+                <div class="table-header">🛡️ admins</div>
+                <div class="field pk">
+                    <span class="badge badge-pk">PK</span>
+                    <span class="field-name">id</span>
+                    <span class="field-type">INTEGER</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">username</span>
+                    <span class="field-type">TEXT UNIQUE</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">password_hash</span>
+                    <span class="field-type">TEXT</span>
+                </div>
+                <div class="field">
+                    <span class="field-name">is_superadmin</span>
+                    <span class="field-type">BOOLEAN</span>
+                </div>
+            </div>
+
+        </div><!-- .diagram -->
+    </div><!-- .diagram-wrapper -->
+
+    <script>
+        /**
+         * Returns the center-left or center-right point of an element
+         * relative to #wrapper's top-left corner.
+         */
+        function getAnchor(elId, side) {
+            const wrapper = document.getElementById('wrapper');
+            const wRect   = wrapper.getBoundingClientRect();
+            const eRect   = document.getElementById(elId).getBoundingClientRect();
+            const x = side === 'right' ? eRect.right - wRect.left : eRect.left - wRect.left;
+            const y = eRect.top + eRect.height / 2 - wRect.top;
+            return { x, y };
+        }
+
+        /**
+         * Draws a cubic-bezier path between two field anchors.
+         * fromSide / toSide: 'left' | 'right'
+         * optional: renders as dashed line
+         */
+        function drawRelation(svg, fromId, fromSide, toId, toSide, optional = false) {
+            const A = getAnchor(fromId, fromSide);
+            const B = getAnchor(toId,   toSide);
+
+            // Horizontal offset for control points — creates a smooth S-curve
+            const dx = Math.abs(B.x - A.x) * 0.55;
+            const cp1 = { x: A.x + (fromSide === 'right' ?  dx : -dx), y: A.y };
+            const cp2 = { x: B.x + (toSide   === 'left'  ? -dx :  dx), y: B.y };
+
+            // Path
+            const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+            path.setAttribute('d',
+                `M ${A.x} ${A.y} C ${cp1.x} ${cp1.y}, ${cp2.x} ${cp2.y}, ${B.x} ${B.y}`
+            );
+            path.setAttribute('class', optional ? 'rel-line optional' : 'rel-line');
+            svg.appendChild(path);
+
+            // Source dot (origin)
+            const dotA = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            dotA.setAttribute('cx', A.x);
+            dotA.setAttribute('cy', A.y);
+            dotA.setAttribute('r',  4.5);
+            dotA.setAttribute('fill', 'var(--sage-dark)');
+            dotA.setAttribute('opacity', optional ? '0.65' : '1');
+            svg.appendChild(dotA);
+
+            // Target dot (FK end)
+            const dotB = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            dotB.setAttribute('cx', B.x);
+            dotB.setAttribute('cy', B.y);
+            dotB.setAttribute('r',  5);
+            dotB.setAttribute('fill', 'var(--tangerine)');
+            dotB.setAttribute('opacity', optional ? '0.65' : '1');
+            svg.appendChild(dotB);
+
+            // Small tick label "FK" near target
+            const label = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            const labelX = toSide === 'left' ? B.x - 22 : B.x + 8;
+            label.setAttribute('x', labelX);
+            label.setAttribute('y', B.y - 7);
+            label.setAttribute('font-size', '9');
+            label.setAttribute('font-family', 'DM Sans, sans-serif');
+            label.setAttribute('font-weight', '700');
+            label.setAttribute('fill', optional ? '#aaa' : 'var(--sage-dark)');
+            label.textContent = optional ? 'FK?' : 'FK';
+            svg.appendChild(label);
+        }
+
+        window.addEventListener('load', () => {
+            const svg = document.getElementById('lines');
+
+            // fruits.id  ──►  smoothie_fruits.fruit_id
+            drawRelation(svg, 'fruits-id',       'right', 'sf-fruit-id',        'left');
+
+            // smoothies.id  ◄──  smoothie_fruits.smoothie_id
+            // (smoothies is col 3, smoothie_fruits is col 2 — line goes right-to-left)
+            drawRelation(svg, 'smoothies-id',    'left',  'sf-smoothie-id',     'right');
+
+            // smoothies.id  ──►  orders.smoothie_id
+            drawRelation(svg, 'smoothies-id',    'right', 'orders-smoothie-id', 'left');
+
+            // users.id  ──►  orders.user_id  (optional / nullable)
+            drawRelation(svg, 'users-id',        'left',  'orders-user-id',     'right', true);
+        });
+    </script>
+
+</body>
+</html>

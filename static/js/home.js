@@ -28,19 +28,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="macro-label">ккал</div>
                   </div>
                   <div class="macro">
-                    <div class="macro-value">${s.total_protein || 0}g</div>
+                    <div class="macro-value">${s.total_protein || 0}г</div>
                     <div class="macro-label">протеин</div>
                   </div>
                   <div class="macro">
-                    <div class="macro-value">${s.total_carbs || 0}g</div>
+                    <div class="macro-value">${s.total_carbs || 0}г</div>
                     <div class="macro-label">въглехидрати</div>
                   </div>
                   <div class="macro">
-                    <div class="macro-value">${s.total_fat || 0}g</div>
+                    <div class="macro-value">${s.total_fat || 0}г</div>
                     <div class="macro-label">мазнини</div>
                   </div>
                   <div class="macro">
-                    <div class="macro-value">${s.total_fiber || 0}g</div>
+                    <div class="macro-value">${s.total_fiber || 0}г</div>
                     <div class="macro-label">фибри</div>
                   </div>
                 </div>

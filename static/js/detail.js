@@ -40,19 +40,19 @@ document.addEventListener('DOMContentLoaded', async () => {
               <div class="macro-label">Калории</div>
             </div>
             <div class="macro">
-              <div class="macro-value">${smoothie.total_protein || 0}g</div>
+              <div class="macro-value">${smoothie.total_protein || 0}г</div>
               <div class="macro-label">Протеин</div>
             </div>
             <div class="macro">
-              <div class="macro-value">${smoothie.total_carbs || 0}g</div>
+              <div class="macro-value">${smoothie.total_carbs || 0}г</div>
               <div class="macro-label">Въглехидрати</div>
             </div>
             <div class="macro">
-              <div class="macro-value">${smoothie.total_fat || 0}g</div>
+              <div class="macro-value">${smoothie.total_fat || 0}г</div>
               <div class="macro-label">Мазнини</div>
             </div>
             <div class="macro">
-              <div class="macro-value">${smoothie.total_fiber || 0}g</div>
+              <div class="macro-value">${smoothie.total_fiber || 0}г</div>
               <div class="macro-label">Фибри</div>
             </div>
         `;
@@ -62,22 +62,22 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div class="ingredient-card">
               <div class="ing-emoji">${emojiImg(f.emoji, f.name)}</div>
               <div class="ing-name">${f.name}</div>
-              <div class="ing-grams">${f.grams}g</div>
+              <div class="ing-grams">${f.grams}г</div>
               <div style="margin-top:.7rem; display:grid; grid-template-columns:1fr 1fr; gap:.3rem;">
                 <div class="macro" style="padding:.35rem;">
                   <div class="macro-value" style="font-size:.78rem;">${f.calories || 0}</div>
                   <div class="macro-label">ккал</div>
                 </div>
                 <div class="macro" style="padding:.35rem;">
-                  <div class="macro-value" style="font-size:.78rem;">${f.protein_g || 0}g</div>
+                  <div class="macro-value" style="font-size:.78rem;">${f.protein_g || 0}г</div>
                   <div class="macro-label">прот</div>
                 </div>
                 <div class="macro" style="padding:.35rem;">
-                  <div class="macro-value" style="font-size:.78rem;">${f.carbs_g || 0}g</div>
+                  <div class="macro-value" style="font-size:.78rem;">${f.carbs_g || 0}г</div>
                   <div class="macro-label">въгл</div>
                 </div>
                 <div class="macro" style="padding:.35rem;">
-                  <div class="macro-value" style="font-size:.78rem;">${f.fiber_g || 0}g</div>
+                  <div class="macro-value" style="font-size:.78rem;">${f.fiber_g || 0}г</div>
                   <div class="macro-label">фибри</div>
                 </div>
               </div>

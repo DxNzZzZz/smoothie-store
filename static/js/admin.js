@@ -39,7 +39,7 @@ function renderOrders(orders) {
             `<div style="display:flex; align-items:center; gap:0.5rem; padding:0.3rem 0; border-bottom:1px solid #f0f0f0;">
                 <span>${emojiImg(i.emoji, i.name)}</span>
                 <span style="flex:1;">${i.name}</span>
-                <strong>${i.grams}g</strong>
+                <strong>${i.grams}г</strong>
             </div>`
         ).join('');
         const ingredientsBlock = ingredientRows

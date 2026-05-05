@@ -28,19 +28,19 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <div class="macro-label">ккал</div>
                   </div>
                   <div class="macro">
-                    <div class="macro-value">${s.total_protein || 0}g</div>
+                    <div class="macro-value">${s.total_protein || 0}г</div>
                     <div class="macro-label">протеин</div>
                   </div>
                   <div class="macro">
-                    <div class="macro-value">${s.total_carbs || 0}g</div>
+                    <div class="macro-value">${s.total_carbs || 0}г</div>
                     <div class="macro-label">въглехидрати</div>
                   </div>
                   <div class="macro">
-                    <div class="macro-value">${s.total_fat || 0}g</div>
+                    <div class="macro-value">${s.total_fat || 0}г</div>
                     <div class="macro-label">мазнини</div>
                   </div>
                   <div class="macro">
-                    <div class="macro-value">${s.total_fiber || 0}g</div>
+                    <div class="macro-value">${s.total_fiber || 0}г</div>
                     <div class="macro-label">фибри</div>
                   </div>
                 </div>
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             </div>
           </div>
           <div class="card-body custom-cta-body">
-            <p class="card-desc">Избери плодове, течност и размер — ние го правим. Цената се изчислява автоматично.</p>
+            <p class="card-desc">Избери плодове, основа и размер — ние го правим. Цената се изчислява автоматично.</p>
             <div class="custom-cta-btn">Създай сега →</div>
           </div>
         `;
