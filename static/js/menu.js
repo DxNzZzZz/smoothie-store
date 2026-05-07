@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             card.innerHTML = `
               <div class="card-header">
                 <div>
-                  <div class="card-name">${s.name}</div>
+                  <div class="card-name">${emojiImg(s.emoji, s.name)} ${s.name}</div>
                   <div class="card-price">€${s.price.toFixed(2)}</div>
                 </div>
               </div>

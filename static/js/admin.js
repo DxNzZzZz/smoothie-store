@@ -37,7 +37,7 @@ function renderOrders(orders) {
 
         const ingredientRows = (o.ingredients || []).map(i =>
             `<div style="display:flex; align-items:center; gap:0.5rem; padding:0.3rem 0; border-bottom:1px solid #f0f0f0;">
-                <span>${i.emoji}</span>
+                <span>${emojiImg(i.emoji, i.name)}</span>
                 <span style="flex:1;">${i.name}</span>
                 <strong>${i.grams}g</strong>
             </div>`
@@ -56,7 +56,7 @@ function renderOrders(orders) {
                     <h3 style="margin: 0 0 5px 0;">Поръчка #${o.id}</h3>
                     <p style="margin: 0 0 10px 0; color: #666; font-size: 0.9rem;">От: <strong>${o.customer_name || 'Неизвестен'}</strong> ${userMark}</p>
                     <div style="font-size: 1.1rem; margin-bottom: 5px;">
-                        <strong>${o.smoothie_name}</strong> ${isCustom}
+                        <strong>${emojiImg(o.smoothie_emoji, o.smoothie_name)} ${o.smoothie_name}</strong> ${isCustom}
                     </div>
                     <div style="color: #666; text-transform: capitalize;">Размер: ${sizeText}</div>
                     <div style="color: #888; font-size: 0.85rem; margin-top: 5px;">${o.created_at}</div>

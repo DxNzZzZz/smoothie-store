@@ -1,3 +1,11 @@
+function emojiImg(src, alt = '') {
+    if (!src) return '';
+    if (src.startsWith('/')) {
+        return `<img src="${src}" alt="${alt}" style="width:1.5em;height:1.5em;object-fit:contain;vertical-align:middle;">`;
+    }
+    return src;
+}
+
 async function loadComponent(id, url) {
     try {
         const response = await fetch(url);

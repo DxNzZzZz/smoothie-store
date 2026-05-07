@@ -69,6 +69,7 @@ async fn main() {
         .mount("/css", FileServer::from("static/css").rank(1))
         .mount("/js", FileServer::from("static/js").rank(1))
         .mount("/components", FileServer::from("static/components").rank(1))
+        .mount("/emojis", FileServer::from("static/emojis").rank(1))
         .launch()
         .await;
 }

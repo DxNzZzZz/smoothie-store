@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
             const ingredientRows = (o.ingredients || []).map(i =>
                 `<div style="display:flex; align-items:center; gap:0.5rem; padding:0.25rem 0; border-bottom:1px solid #f0f0f0; font-size:0.875rem;">
-                    <span>${i.emoji}</span>
+                    <span>${emojiImg(i.emoji, i.name)}</span>
                     <span style="flex:1;">${i.name}</span>
                     <span style="color:#888;">${i.grams}g</span>
                 </div>`
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <div style="background:white; border-radius:12px; box-shadow:0 4px 6px rgba(0,0,0,0.05); margin-bottom:1rem; overflow:hidden;">
                 <div style="padding:1rem 1.25rem; display:flex; justify-content:space-between; align-items:flex-start; flex-wrap:wrap; gap:0.5rem;">
                     <div>
-                        <div style="font-size:1.05rem; font-weight:700;">${o.smoothie_name}${customBadge}</div>
+                        <div style="font-size:1.05rem; font-weight:700;">${emojiImg(o.smoothie_emoji, o.smoothie_name)} ${o.smoothie_name}${customBadge}</div>
                         <div style="color:#888; font-size:0.82rem; margin-top:2px;">${o.created_at} &middot; ${sizeLabel} &middot; ${statusBadge}</div>
                     </div>
                     <button class="btn" data-idx="${idx}" style="padding:0.4rem 1rem; font-size:0.875rem; white-space:nowrap;">Поръчай Отново</button>

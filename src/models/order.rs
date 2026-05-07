@@ -41,6 +41,7 @@ pub struct OrderWithSmoothie {
     pub id: i64,
     pub smoothie_id: i64,
     pub smoothie_name: String,
+    pub smoothie_emoji: String,
     pub size: String,
     pub customer_name: String,
     pub created_at: String,
@@ -60,6 +61,7 @@ pub struct OrderIngredient {
 pub struct PendingOrder {
     pub id: i64,
     pub smoothie_name: String,
+    pub smoothie_emoji: String,
     pub size: String,
     pub customer_name: String,
     pub created_at: String,
@@ -71,8 +73,8 @@ pub struct PendingOrder {
 pub async fn get_pending_orders(pool: &SqlitePool) -> Vec<PendingOrder> {
     let orders = sqlx::query_as::<_, OrderWithSmoothie>(
         r#"
-        SELECT o.id, o.smoothie_id, s.name as smoothie_name, o.size, o.customer_name,
-               o.created_at, o.status, s.is_custom, o.user_id
+        SELECT o.id, o.smoothie_id, s.name as smoothie_name, s.emoji as smoothie_emoji,
+               o.size, o.customer_name, o.created_at, o.status, s.is_custom, o.user_id
         FROM orders o
         JOIN smoothies s ON s.id = o.smoothie_id
         WHERE o.status = 'pending'
@@ -110,6 +112,7 @@ pub async fn get_pending_orders(pool: &SqlitePool) -> Vec<PendingOrder> {
         result.push(PendingOrder {
             id: o.id,
             smoothie_name: o.smoothie_name,
+            smoothie_emoji: o.smoothie_emoji,
             size: o.size,
             customer_name: o.customer_name,
             created_at: o.created_at,
@@ -139,6 +142,7 @@ pub struct UserOrderDetail {
     pub id: i64,
     pub smoothie_id: i64,
     pub smoothie_name: String,
+    pub smoothie_emoji: String,
     pub size: String,
     pub created_at: String,
     pub status: String,
@@ -153,8 +157,8 @@ pub struct UserOrderDetail {
 pub async fn get_user_orders(pool: &SqlitePool, user_id: i64) -> Vec<UserOrderDetail> {
     let rows = sqlx::query_as::<_, OrderWithSmoothie>(
         r#"
-        SELECT o.id, o.smoothie_id, s.name as smoothie_name, o.size, o.customer_name,
-               o.created_at, o.status, s.is_custom, o.user_id
+        SELECT o.id, o.smoothie_id, s.name as smoothie_name, s.emoji as smoothie_emoji,
+               o.size, o.customer_name, o.created_at, o.status, s.is_custom, o.user_id
         FROM orders o
         JOIN smoothies s ON s.id = o.smoothie_id
         WHERE o.user_id = ?
@@ -204,6 +208,7 @@ pub async fn get_user_orders(pool: &SqlitePool, user_id: i64) -> Vec<UserOrderDe
             id: o.id,
             smoothie_id: o.smoothie_id,
             smoothie_name: o.smoothie_name,
+            smoothie_emoji: o.smoothie_emoji,
             size: o.size,
             created_at: o.created_at,
             status: o.status,

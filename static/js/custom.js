@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             <label class="liquid-option" data-id="${l.id}">
               <input type="radio" name="liquid_id" value="${l.id}" required ${idx === 0 ? 'checked' : ''}>
               <div style="display: flex; flex-direction: column;">
-                <span>${l.emoji || ''} ${l.name}</span>
+                <span>${emojiImg(l.emoji, l.name)} ${l.name}</span>
                 <small style="color: #888; font-size: 0.75rem;">${l.calories || 0} ккал | ${l.protein_g || 0}п | ${l.carbs_g || 0}в | ${l.fat_g || 0}м (на 100g)</small>
               </div>
             </label>
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         fruitContainer.innerHTML = fruits.map(f => `
             <div class="fruit-option" data-id="${f.id}">
               <div class="fruit-option-header">
-                <span class="fruit-option-emoji">${f.emoji || ''}</span>
+                <span class="fruit-option-emoji">${emojiImg(f.emoji, f.name)}</span>
                 <div class="fruit-option-info">
                   <div class="fruit-option-name-row">
                     <span class="fruit-option-name">${f.name}</span>
@@ -190,7 +190,7 @@ function recalc() {
 
       const li = document.createElement('li');
       li.style.marginBottom = '0.5rem';
-      li.innerHTML = `<span>${item.emoji || ''} ${item.name}</span> <span style="float:right; font-weight:bold;">${gFloat}g</span>`;
+      li.innerHTML = `<span>${emojiImg(item.emoji, item.name)} ${item.name}</span> <span style="float:right; font-weight:bold;">${gFloat}g</span>`;
       summaryList.appendChild(li);
     }
     
