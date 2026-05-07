@@ -102,15 +102,14 @@ document.addEventListener('DOMContentLoaded', async () => {
             
             const flash = document.getElementById('flash-message');
             flash.style.display = 'block';
-            if (data.success) {
+            if (data.success && data.smoothie_id) {
                 flash.className = 'flash flash-success';
                 flash.textContent = data.message;
-                // scroll to top
-                window.scrollTo(0,0);
-                setTimeout(() => window.location.href = '/profile.html?success=true', 1500);
+                window.scrollTo(0, 0);
+                setTimeout(() => window.location.href = '/order?id=' + data.smoothie_id, 1200);
             } else {
                 flash.className = 'flash flash-error';
-                flash.textContent = data.message || 'Error occurred';
+                flash.textContent = data.message || 'Възникна грешка';
             }
         } catch(err) {
             console.error(err);

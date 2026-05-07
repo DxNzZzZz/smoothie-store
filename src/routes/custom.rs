@@ -47,6 +47,7 @@ pub async fn builder_api(pool: &State<SqlitePool>) -> Json<BuilderData> {
 pub struct CustomOrderResponse {
     pub success: bool,
     pub message: String,
+    pub smoothie_id: Option<i64>,
 }
 
 #[post("/api/custom", data = "<form>")]
@@ -62,6 +63,7 @@ pub async fn submit_custom_api(
             return Json(CustomOrderResponse {
                 success: false,
                 message: "Невалидни съставки.".to_string(),
+                smoothie_id: None,
             })
         }
     };
@@ -70,6 +72,7 @@ pub async fn submit_custom_api(
         return Json(CustomOrderResponse {
             success: false,
             message: "Моля изберете поне една съставка.".to_string(),
+            smoothie_id: None,
         });
     }
 
@@ -82,6 +85,7 @@ pub async fn submit_custom_api(
             return Json(CustomOrderResponse {
                 success: false,
                 message: "Невалиден размер.".to_string(),
+                smoothie_id: None,
             })
         }
     };
@@ -101,6 +105,7 @@ pub async fn submit_custom_api(
                 "Общото тегло на плодовете ({:.0}г) надвишава лимита за размер {:.0}г.",
                 total_fruit_g, max_fruit_g
             ),
+            smoothie_id: None,
         });
     }
 
@@ -122,7 +127,6 @@ pub async fn submit_custom_api(
     let rounded_price = (total_price * 100.0).round() / 100.0;
 
     let fallback_name = request_user.0.as_ref().map(|u| u.full_name.clone());
-    let user_id = request_user.0.as_ref().map(|u| u.id);
     let final_name = form
         .customer_name
         .clone()
@@ -131,14 +135,15 @@ pub async fn submit_custom_api(
 
     let smoothie_name = format!("Персонализирана смес от {}", final_name);
 
-    // Single transaction covers smoothie creation, ingredients, and order
+    // Transaction covers smoothie creation and ingredients
     let mut tx = match pool.begin().await {
         Ok(t) => t,
         Err(e) => {
             eprintln!("Failed to start transaction: {e}");
             return Json(CustomOrderResponse {
                 success: false,
-                message: "Грешка при създаване на поръчка.".to_string(),
+                message: "Грешка при създаване на смути.".to_string(),
+                smoothie_id: None,
             });
         }
     };
@@ -161,6 +166,7 @@ pub async fn submit_custom_api(
             return Json(CustomOrderResponse {
                 success: false,
                 message: "Грешка при създаване на смути.".to_string(),
+                smoothie_id: None,
             });
         }
     };
@@ -180,39 +186,23 @@ pub async fn submit_custom_api(
             return Json(CustomOrderResponse {
                 success: false,
                 message: "Грешка при запис на съставките.".to_string(),
+                smoothie_id: None,
             });
         }
-    }
-
-    let size = &form.size;
-    if let Err(e) = sqlx::query(
-        "INSERT INTO orders (smoothie_id, size, customer_name, status, user_id) VALUES (?, ?, ?, 'pending', ?)",
-    )
-    .bind(smoothie_id)
-    .bind(size)
-    .bind(&final_name)
-    .bind(user_id)
-    .execute(&mut *tx)
-    .await
-    {
-        eprintln!("Failed to insert custom order: {e}");
-        let _ = tx.rollback().await;
-        return Json(CustomOrderResponse {
-            success: false,
-            message: "Грешка при създаване на поръчка.".to_string(),
-        });
     }
 
     match tx.commit().await {
         Ok(_) => Json(CustomOrderResponse {
             success: true,
-            message: "Поръчката е приета успешно!".to_string(),
+            message: "Смутито е създадено! Добавяме го в количката...".to_string(),
+            smoothie_id: Some(smoothie_id),
         }),
         Err(e) => {
             eprintln!("Transaction commit failed: {e}");
             Json(CustomOrderResponse {
                 success: false,
-                message: "Грешка при записване на поръчката.".to_string(),
+                message: "Грешка при записване на смутито.".to_string(),
+                smoothie_id: None,
             })
         }
     }
